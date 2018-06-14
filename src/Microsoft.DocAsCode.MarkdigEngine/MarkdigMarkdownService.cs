@@ -135,9 +135,14 @@ namespace Microsoft.DocAsCode.MarkdigEngine
         {
             object enableSourceInfoObj = null;
             _parameters?.Extensions?.TryGetValue("EnableSourceInfo", out enableSourceInfoObj);
-
             var enabled = enableSourceInfoObj as bool?;
             var enableSourceInfo = enabled == null || enabled.Value;
+
+
+            object enableAladdinInfoObj = null;
+            _parameters?.Extensions?.TryGetValue("EnableAladdin", out enableAladdinInfoObj);
+            var enabledAladdin = enableAladdinInfoObj as bool?;
+            var enabledAladdinExtension = enabledAladdin == null || enabledAladdin.Value;
 
             var builder = new MarkdownPipelineBuilder();
 
@@ -152,6 +157,11 @@ namespace Microsoft.DocAsCode.MarkdigEngine
             if (enableValidation)
             {
                 builder.Extensions.Add(new ValidationExtension(_mvb, _context));
+            }
+
+            if (enabledAladdinExtension)
+            {
+                builder.Extensions.Add(new AladdinExtension(_context));
             }
 
             if (isInline)
