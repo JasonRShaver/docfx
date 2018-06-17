@@ -20,46 +20,50 @@ namespace Microsoft.DocAsCode.MarkdigEngine.Extensions
 
         protected override void Write(HtmlRenderer renderer, AladdinBlock obj)
         {
-            var hookId = $"{obj.Page}-aladdin-hook";
-            var hookDivId = $"#{hookId}";
-            var title = "Related Questions";
-
+            var hookId = $"{obj.name}-aladdin-hook";
             var aladdinPrompt = @"
+<div id={hookId} class='aladdin-hook'>
+    <script src='../articles/aladdin/jquery-2.2.4.min.js' type='text/javascript'></script>
+    <script src='../articles/aladdin/showdown.min.js' type='text/javascript'></script>
+    <script src='../articles/aladdin/swiper.min.js' type='text/javascript'></script>
+    <script src='../articles/aladdin/aladdin.js' type='text/javascript'></script>
 
-<script src='../articles/aladdin/jquery-2.2.4.min.js' type='text/javascript'></script>
-<script src='../articles/aladdin/showdown.min.js' type='text/javascript'></script>
-<script src='../articles/aladdin/swiper.min.js' type='text/javascript'></script>
-<script src='../articles/aladdin/aladdin.js' type='text/javascript'></script>
+    <script>$('head').append(""<link rel='stylesheet' type='text/css' href='../articles/aladdin/aladdin.css'>"");</script>
+    <script>$('head').append(""<link rel='stylesheet' type='text/css' href='../articles/aladdin/swiper.min.css'>"");</script>'
 
-<script>$('head').append(""<link rel='stylesheet' type='text/css' href='../articles/aladdin/aladdin.css'>"");</script>
-<script>$('head').append(""<link rel='stylesheet' type='text/css' href='../articles/aladdin/swiper.min.css'>"");</script>'
-
-<div id={hookId} class='aladdin-hook' title='{title}'>
-   <div class='question-border'></div>
-   <div style='display:inline-block'>
-      <a class='question-button question-icon' id='{hookId}-questions-icon'>
-         {title} <div><i class='ms-Icon ms-Icon--ChevronDown'></i></div>
-      </a>
-   </div>
-   <div class='question-border'></div>
+    <div class='question-border'></div>
+    
+    <div style='display:inline-block'>
+        <a class='question-button question-icon' id='{hookId}-question-icon'>
+            Related Questions <div><i class='ms-Icon ms-Icon--ChevronDown'></i></div></a>
+    </div>
+    <div class='question-border'></div>
 </div>
 
 <script type='text/javascript'>
-     $('#{hookId}-questions-icon').click(function() {
-        var page = '{page}';
-        var section = '{section}';
+    // Add the click event to enable Aladdin to live
+    $('#{hookId}-question-icon').click(function() {
+        var readFrom = '{readFrom}';
+        var name = '{name}';
         var hookId = '#{hookId}';
         var chevronDown = '<div><i class=""ms-Icon ms-Icon--ChevronDown""></i></div>';
         var chevronUp = '<div><i class=""ms-Icon ms-Icon--ChevronUp""></i></div>';
-        handleInteractionLinesClick(page, section, hookId, chevronUp, chevronDown);
+        handleInteractionLinesClick(name, readFrom, hookId, chevronUp, chevronDown);
     });
-</script>
-";
-            //var content = "Here!";
+    
+    // Tell Aladdin to die when you hit 'esc', you mean, mean, person, but only for search
+    $('body').keyup(function (e) {
+        if (e.keyCode == 27) { closeSearchCard(); }
+    });
+    // All telemetry event for tracking engagement rate by page (left without opening Aladdin)
+    window.addEventListener('beforeunload', function (e) {
+        loggingNavigationAwayFromPage()
+    });
+</script>";
+
             aladdinPrompt = aladdinPrompt.Replace("{hookId}", hookId);
-            aladdinPrompt = aladdinPrompt.Replace("{title}", title);
-            aladdinPrompt = aladdinPrompt.Replace("{page}", obj.Page);
-            aladdinPrompt = aladdinPrompt.Replace("{section}", obj.Section);
+            aladdinPrompt = aladdinPrompt.Replace("{readFrom}", obj.readFrom);
+            aladdinPrompt = aladdinPrompt.Replace("{name}", obj.name);
 
             renderer.Write(aladdinPrompt);
         }

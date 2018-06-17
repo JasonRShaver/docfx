@@ -43,9 +43,9 @@ namespace Microsoft.DocAsCode.MarkdigEngine.Extensions
                 }
             }
 
-            string page = null, section = null;
+            string readFrom = null, name = null;
 
-            if (!ExtensionsHelper.MatchLink(ref line, ref page, ref section))
+            if (!ExtensionsHelper.MatchLink(ref line, ref name, ref readFrom))
             {
                 return BlockState.None;
             }
@@ -56,8 +56,8 @@ namespace Microsoft.DocAsCode.MarkdigEngine.Extensions
                 return BlockState.None;
             }
 
-            aladdinBlock.Page = page;
-            aladdinBlock.Section = section;
+            aladdinBlock.readFrom = readFrom;
+            aladdinBlock.name = name;
             processor.NewBlocks.Push(aladdinBlock);
 
             return BlockState.BreakDiscard;

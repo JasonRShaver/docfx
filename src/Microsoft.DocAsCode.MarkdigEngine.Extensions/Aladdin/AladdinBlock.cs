@@ -8,11 +8,12 @@ namespace Microsoft.DocAsCode.MarkdigEngine.Extensions
 
     public class AladdinBlock : LeafBlock
     {
-        public string Page { get; set; }
+        public string name { get; set; }
 
-        public string Section { get; set; }
+        public string readFrom { get; set; }
 
-        public string GetRawToken => $"[!aladdin[{Page}]({Section})]";
+
+        public string GetRawToken => $"[!aladdin[{name}]({readFrom})]";
 
         public AladdinBlock(BlockParser parser): base(parser)
         {
