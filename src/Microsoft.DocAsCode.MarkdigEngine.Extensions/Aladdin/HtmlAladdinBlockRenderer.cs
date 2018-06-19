@@ -25,40 +25,31 @@ namespace Microsoft.DocAsCode.MarkdigEngine.Extensions
 <div id={hookId} class='aladdin-hook'>
     <script src='../articles/aladdin/jquery-2.2.4.min.js' type='text/javascript'></script>
     <script src='../articles/aladdin/showdown.min.js' type='text/javascript'></script>
-    <script src='../articles/aladdin/swiper.min.js' type='text/javascript'></script>
     <script src='../articles/aladdin/aladdin.js' type='text/javascript'></script>
-
     <script>$('head').append(""<link rel='stylesheet' type='text/css' href='../articles/aladdin/aladdin.css'>"");</script>
-    <script>$('head').append(""<link rel='stylesheet' type='text/css' href='../articles/aladdin/swiper.min.css'>"");</script>'
 
-    <div class='question-border'></div>
-    
+    <div class='question-border'></div>    
     <div style='display:inline-block'>
         <a class='question-button question-icon' id='{hookId}-question-icon'>
-            Related Questions <div><i class='ms-Icon ms-Icon--ChevronDown'></i></div></a>
-    </div>
+            Related Questions <div><i class='ms-Icon ms-Icon--ChevronDown'></i></div></a></div>
     <div class='question-border'></div>
 </div>
 
 <script type='text/javascript'>
+
     // Add the click event to enable Aladdin to live
     $('#{hookId}-question-icon').click(function() {
         var readFrom = '{readFrom}';
         var name = '{name}';
         var hookId = '#{hookId}';
-        var chevronDown = '<div><i class=""ms-Icon ms-Icon--ChevronDown""></i></div>';
-        var chevronUp = '<div><i class=""ms-Icon ms-Icon--ChevronUp""></i></div>';
-        handleInteractionLinesClick(name, readFrom, hookId, chevronUp, chevronDown);
+        handleInteractionLinesClick(name, readFrom, hookId, false);
     });
     
     // Tell Aladdin to die when you hit 'esc', you mean, mean, person, but only for search
-    $('body').keyup(function (e) {
-        if (e.keyCode == 27) { closeSearchCard(); }
-    });
+    $('body').keyup(function (e) { if (e.keyCode == 27) { closeSearchCard(); }});
+
     // All telemetry event for tracking engagement rate by page (left without opening Aladdin)
-    window.addEventListener('beforeunload', function (e) {
-        loggingNavigationAwayFromPage()
-    });
+    window.addEventListener('beforeunload', function (e) {loggingNavigationAwayFromPage()});
 </script>";
 
             aladdinPrompt = aladdinPrompt.Replace("{hookId}", hookId);
